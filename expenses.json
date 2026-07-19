@@ -1,58 +1,52 @@
 [
-  {
-    "id": "abc12345",
-    "date": "2024-01-15",
-    "category": "Food",
-    "amount": 25.50,
-    "note": "Lunch with colleagues"
-  },
-  {
-    "id": "def67890",
-    "date": "2024-01-15",
-    "category": "Transport",
-    "amount": 15.00,
-    "note": "Bus fare"
-  },
-  {
-    "id": "ghi11111",
-    "date": "2024-01-16",
-    "category": "Entertainment",
-    "amount": 45.00,
-    "note": "Movie tickets"
-  },
-  {
-    "id": "jkl22222",
-    "date": "2024-01-16",
-    "category": "Food",
-    "amount": 32.75,
-    "note": "Dinner at restaurant"
-  },
-  {
-    "id": "mno33333",
-    "date": "2024-01-17",
-    "category": "Utilities",
-    "amount": 85.00,
-    "note": "Monthly internet bill"
-  },
-  {
-    "id": "pqr44444",
-    "date": "2024-01-18",
-    "category": "Shopping",
-    "amount": 120.00,
-    "note": "New shoes and clothing"
-  },
-  {
-    "id": "stu55555",
-    "date": "2024-01-15",
-    "category": "Food",
-    "amount": 12.50,
-    "note": "Lunch (duplicate test)"
-  },
-  {
-    "id": "vwx66666",
-    "date": "2024-01-15",
-    "category": "Food",
-    "amount": 12.50,
-    "note": "Lunch (duplicate test)"
-  }
+    {
+        "id": "abc12345",
+        "date": "2024-01-15",
+        "category": "Food",
+        "amount": 25.5,
+        "note": "Lunch with colleagues"
+    },
+    {
+        "id": "def67890",
+        "date": "2024-01-15",
+        "category": "Transport",
+        "amount": 15.0,
+        "note": "Bus fare"
+    },
+    {
+        "id": "ghi11111",
+        "date": "2024-01-16",
+        "category": "Entertainment",
+        "amount": 45.0,
+        "note": "Movie tickets"
+    },
+    {
+        "id": "jkl22222",
+        "date": "2024-01-16",
+        "category": "Food",
+        "amount": 32.75,
+        "note": "Dinner at restaurant"
+    },
+    {
+        "id": "mno33333",
+        "date": "2024-01-17",
+        "category": "Utilities",
+        "amount": 85.0,
+        "note": "Monthly internet bill"
+    },
+    {
+        "id": "pqr44444",
+        "date": "2024-01-18",
+        "category": "Shopping",
+        "amount": 120.0,
+        "note": "New shoes and clothing"
+    },
+    {
+        "id": "vwx66666",
+        "date": "2024-01-15",
+        "category": "Food",
+        "amount": 12.5,
+        "note": "Lunch (duplicate test)"
+    }
 ]
+
