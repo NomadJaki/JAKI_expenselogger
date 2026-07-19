@@ -1,28 +1,71 @@
-import os
+"""
+file_handler.py
+
+This module handles all file operations.
+It loads expense data from a JSON file,
+saves data back to the file,
+and creates backup files.
+"""
+
 import json
-from datetime import datetime
+import os
+import shutil
 
-FILE_NAME = "expenses.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FILE_NAME = os.path.join(BASE_DIR, "expenses.json")
 
-def load_data():
+
+def load_expenses():
+    """Load expense records from the JSON file."""
+
     if not os.path.exists(FILE_NAME):
-        return []
-    try:
-        with open(FILE_NAME, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except json.JSONDecodeError:
+        with open(FILE_NAME, "w", encoding="utf-8") as file:
+            json.dump([], file, indent=4)
         return []
 
-def save_data(expenses):
-    with open(FILE_NAME, "w", encoding="utf-8") as f:
-        json.dump(expenses, f, ensure_ascii=False, indent=4)
+    try:
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data
+    except json.JSONDecodeError:
+        print("Error: JSON file is corrupted.")
+        return []
+    except Exception as e:
+        print("Unexpected error:", e)
+        return []
+
+
+def save_expenses(expenses):
+    """Save all expenses into the JSON file."""
+
+    try:
+        with open(FILE_NAME, "w", encoding="utf-8") as file:
+            json.dump(expenses, file, indent=4)
+    except Exception as e:
+        print("Error saving file:", e)
+
 
 def backup_data():
-    print("\n--- 10. Backup Data ---")
-    if os.path.exists(FILE_NAME):
-        backup_name = f"backup_expenses_{datetime.today().strftime('%Y%m%d')}.json"
-        with open(FILE_NAME, "r", encoding="utf-8") as src, open(backup_name, "w", encoding="utf-8") as dst:
-            dst.write(src.read())
-        print(f"✅ Backup created successfully as '{backup_name}'!")
-    else:
-        print("❌ No data file found to backup.")
+    """Create a backup of expenses.json."""
+
+    backup_name = os.path.join(BASE_DIR, "expenses_backup.json")
+
+    try:
+        shutil.copy(FILE_NAME, backup_name)
+        print("Backup created successfully.")
+    except FileNotFoundError:
+        print("No expense file found.")
+    except Exception as e:
+        print("Backup failed:", e)
+
+
+def clear_data():
+    """Delete all expense records."""
+
+    save_expenses([])
+
+
+def file_exists():
+    """Returns True if expenses.json exists."""
+
+    return os.path.exists(FILE_NAME)
