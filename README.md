@@ -2,6 +2,8 @@
 
 A simple desktop application to record and manage your money spending. You can add expenses, find them, and see reports about your spending habits.
 
+I confirm that this assignment is my own work. Where I have referred to online sources, I have provided comments detailing the reference and included a link to the source.
+
 ## What Can You Do?
 
 - **Add Expenses**: Write down what you spent money on with the date, type, amount, and notes
@@ -162,7 +164,7 @@ Each expense has:
 
 The program checks your information before saving:
 
-1. **Date** - Must be in format `YYYY-MM-DD` (like `2024-01-15`). The date must be real (not like February 30).
+1. **Date** - Must be in format 'YYYY-MM-DD' (like '2024-01-15'). The date must be real (not like February 30).
 2. **Category** - Must be from the list above. You cannot write your own category.
 3. **Amount** - Must be a number. It must be more than 0 and less than 1,000,000.
 4. **Note** - Can be empty or have words. Maximum 500 letters.
@@ -180,17 +182,13 @@ If something is wrong, the program will tell you the problem.
 
 If you want to check that the program works correctly:
 
-```
-python test_expense_logger.py
-```
-
 This will run tests to make sure all the parts work.
 
 ## Important Notes
 
 - All data is on your computer only
-- Make a backup copy of `expenses.json` if you want to be safe
-- You can open `expenses.json` in any text editor to see your expenses
+- Make a backup copy of 'expenses.json' if you want to be safe
+- You can open 'expenses.json' in any text editor to see your expenses
 - Works on Windows, Mac, and Linux
 - The program is simple and easy to use
 - No special knowledge needed to use it
