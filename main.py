@@ -39,6 +39,7 @@ def refresh_table(expenses=None):
             "",
             tk.END,
             values=(
+                expense.get("id", "N/A"),
                 expense["date"],
                 expense["category"],
                 f"{float(expense['amount']):.2f}",
@@ -83,11 +84,15 @@ def delete_button_clicked():
         return
 
     selected_record = table.item(selected_items[0], "values")
-    confirmed = messagebox.askyesno("Confirm delete", "Delete the selected expense?")
+    expense_id = selected_record[0]  # ID is the first column
+    expense_info = f"{selected_record[1]} - {selected_record[2]}: ${selected_record[3]}"
+    
+    confirmed = messagebox.askyesno("Confirm delete", f"Delete this expense?\n{expense_info}")
 
     if confirmed:
-        delete_expense((selected_record[0], selected_record[1], selected_record[2], selected_record[3]))
+        delete_expense(expense_id)
         refresh_table()
+        messagebox.showinfo("Delete", "Expense deleted successfully.")
 
 
 def sort_button_clicked():
@@ -114,14 +119,14 @@ def search_button_clicked():
 def total_button_clicked():
     expenses = get_all_expenses()
     if not expenses:
-        messagebox.showinfo("Weekly Report", "No expenses recorded yet.")
+        messagebox.showinfo("Overall Report", "No expenses recorded yet.")
         return
 
     total = calculate_total(expenses)
     summary = category_summary(expenses)
     summary_text = "\n".join(f"{name}: ${amount:.2f}" for name, amount in summary.items())
     messagebox.showinfo(
-        "Weekly Report",
+        "Overall Report",
         f"Number of records: {len(expenses)}\nTotal spending: ${total:.2f}\n\nCategory summary:\n{summary_text}",
     )
 
@@ -154,9 +159,9 @@ button_frame.pack(pady=10)
 
 ttk.Button(button_frame, text="Add Expense", command=add_button_clicked).grid(row=0, column=0, padx=5)
 ttk.Button(button_frame, text="Delete Expense", command=delete_button_clicked).grid(row=0, column=1, padx=5)
-ttk.Button(button_frame, text="Sort", command=sort_button_clicked).grid(row=0, column=2, padx=5)
+#ttk.Button(button_frame, text="Sort", command=sort_button_clicked).grid(row=0, column=2, padx=5)
 ttk.Button(button_frame, text="Search", command=search_button_clicked).grid(row=0, column=3, padx=5)
-ttk.Button(button_frame, text="Weekly Report", command=total_button_clicked).grid(row=0, column=4, padx=5)
+ttk.Button(button_frame, text="Overall Report", command=total_button_clicked).grid(row=0, column=4, padx=5)
 ttk.Button(button_frame, text="Show Chart", command=chart_button_clicked).grid(row=0, column=5, padx=5)
 
 search_frame = ttk.Frame(window)
@@ -165,11 +170,16 @@ ttk.Label(search_frame, text="Search").grid(row=0, column=0, padx=5)
 ttk.Entry(search_frame, textvariable=search_var, width=40).grid(row=0, column=1, padx=5)
 ttk.Button(search_frame, text="Find", command=search_button_clicked).grid(row=0, column=2, padx=5)
 
-columns = ("Date", "Category", "Amount", "Note")
+columns = ("ID", "Date", "Category", "Amount", "Note")
 table = ttk.Treeview(window, columns=columns, show="headings", height=15)
 for col in columns:
     table.heading(col, text=col)
-    table.column(col, width=180)
+    if col == "ID":
+        table.column(col, width=80)
+    elif col == "Amount":
+        table.column(col, width=100)
+    else:
+        table.column(col, width=150)
 table.pack(pady=10)
 
 refresh_table()

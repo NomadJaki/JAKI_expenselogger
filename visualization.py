@@ -7,8 +7,8 @@ summaries (used by the Tkinter UI) so the project has
 no external plotting dependency.
 """
 
-from tkinter import messagebox
 from report import category_summary
+from tkinter import messagebox
 
 
 def show_pie_chart(expenses):
@@ -47,4 +47,3 @@ def show_bar_chart(expenses):
 
     message = "Expense bar chart:\n\n" + "\n".join(lines)
     messagebox.showinfo("Expense Chart", message)
-

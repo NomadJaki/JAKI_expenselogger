@@ -1,3 +1,25 @@
 # No external packages required; uses Python standard library only
-# Optional:
-# matplotlib  # For advanced pie charts and bar graphs (currently using text-based visualization)
+
+# ========== OPTIONAL DEPENDENCIES ==========
+
+# Matplotlib - For advanced visualizations (pie charts, bar graphs)
+# INSTALLATION:
+#   pip install matplotlib
+#
+# USAGE:
+#   1. Uncomment the line below
+#   2. In visualization.py, use show_pie_chart_matplotlib() or show_bar_chart_matplotlib()
+#   3. Import: from matplotlib import pyplot as plt
+#
+# FEATURES:
+#   - Interactive pie charts with percentage labels
+#   - Customizable bar charts with axes labels
+#   - High-quality visualizations for reports
+#   - Works with Tkinter GUI
+#
+# DOWNLOAD:
+#   - PyPI: https://pypi.org/project/matplotlib/
+#   - Latest version: pip install --upgrade matplotlib
+#   - Specific version: pip install matplotlib==3.8.0
+
+# matplotlib  # For advanced pie charts and bar graphs
