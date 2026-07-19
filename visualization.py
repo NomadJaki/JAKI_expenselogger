@@ -1,35 +1,14 @@
 """
 visualization.py
 
-Display charts using matplotlib.
-"""
-
-import matplotlib.pyplot as plt
-from report import category_summary
-
-
-
-# Pie Chart
-def show_pie_chart(expenses):
-
-    summary = category_summary(expenses)
-
-    labels = list(summary.keys())
-
-    amounts = list(summary.values())
-
-    plt.figure(figsize=(6, 6))
-"""
-visualization.py
-
 This module provides lightweight visualization helpers
 without depending on matplotlib. It shows simple text
 summaries (used by the Tkinter UI) so the project has
 no external plotting dependency.
 """
 
-from report import category_summary
 from tkinter import messagebox
+from report import category_summary
 
 
 def show_pie_chart(expenses):
@@ -68,3 +47,4 @@ def show_bar_chart(expenses):
 
     message = "Expense bar chart:\n\n" + "\n".join(lines)
     messagebox.showinfo("Expense Chart", message)
+
