@@ -4,8 +4,30 @@ from tkinter import ttk, messagebox
 from expense_manager import add_expense, delete_expense, get_all_expenses
 from report import calculate_total, category_summary
 from search import search_expenses
-from sorting import sort_by_amount
+from sorting import sort_by_amount, sort_by_category
 from visualization import show_pie_chart
+from validation import validate_expense, get_valid_categories
+
+
+# Business logic layer (separated from GUI)
+class ExpenseService:
+    """Service layer for expense operations with validation."""
+    
+    @staticmethod
+    def add_expense_with_validation(date, category, amount, note):
+        """
+        Add expense with full validation.
+        Returns: (success, message, expense_id)
+        """
+        is_valid, error_msg, amount_value = validate_expense(date, category, amount, note)
+        if not is_valid:
+            return False, error_msg, None
+        
+        try:
+            expense_id = add_expense(date, category, amount_value, note)
+            return True, "Expense added successfully!", expense_id
+        except Exception as e:
+            return False, f"Error adding expense: {str(e)}", None
 
 
 window = tk.Tk()
@@ -54,27 +76,17 @@ def add_button_clicked():
     amount = amount_var.get().strip()
     note = note_var.get().strip()
 
-    if date == "":
-        messagebox.showerror("Error", "Please enter a date.")
-        return
-
-    if category == "":
-        messagebox.showerror("Error", "Please enter a category.")
-        return
-
-    if amount == "":
-        messagebox.showerror("Error", "Please enter an amount.")
-        return
-
-    try:
-        amount_value = float(amount)
-    except ValueError:
-        messagebox.showerror("Error", "Amount must be a number.")
-        return
-
-    add_expense(date, category, amount_value, note)
-    clear_inputs()
-    refresh_table()
+    # Use validation service
+    success, message, expense_id = ExpenseService.add_expense_with_validation(
+        date, category, amount, note
+    )
+    
+    if success:
+        messagebox.showinfo("Success", message)
+        clear_inputs()
+        refresh_table()
+    else:
+        messagebox.showerror("Validation Error", message)
 
 
 def delete_button_clicked():
@@ -103,7 +115,7 @@ def sort_button_clicked():
 
     sorted_expenses = sort_by_amount(expenses)
     refresh_table(sorted_expenses)
-    messagebox.showinfo("Sort", "Expenses sorted by amount.")
+    messagebox.showinfo("Sort", "Expenses sorted by amount (lowest to highest).")
 
 
 def search_button_clicked():
@@ -113,7 +125,11 @@ def search_button_clicked():
         return
 
     results = search_expenses(get_all_expenses(), keyword)
-    refresh_table(results)
+    if results:
+        refresh_table(results)
+        messagebox.showinfo("Search", f"Found {len(results)} expense(s).")
+    else:
+        messagebox.showinfo("Search", "No expenses found matching your search.")
 
 
 def total_button_clicked():
@@ -143,23 +159,33 @@ def chart_button_clicked():
 input_frame = ttk.LabelFrame(window, text="Expense Details")
 input_frame.pack(fill="x", padx=20, pady=10)
 
-fields = [
-    ("Date", date_var),
-    ("Category", category_var),
-    ("Amount", amount_var),
-    ("Note", note_var),
-]
+# Date field
+ttk.Label(input_frame, text="Date (YYYY-MM-DD)").grid(row=0, column=0, padx=(10, 5), pady=8)
+ttk.Entry(input_frame, textvariable=date_var, width=20).grid(row=0, column=1, padx=(0, 10), pady=8)
 
-for index, (label_text, variable) in enumerate(fields):
-    ttk.Label(input_frame, text=label_text).grid(row=0, column=index * 2, padx=(10, 5), pady=8)
-    ttk.Entry(input_frame, textvariable=variable, width=20).grid(row=0, column=index * 2 + 1, padx=(0, 10), pady=8)
+# Category dropdown with valid categories
+ttk.Label(input_frame, text="Category").grid(row=0, column=2, padx=(10, 5), pady=8)
+category_combo = ttk.Combobox(
+    input_frame, textvariable=category_var, values=get_valid_categories(),
+    state="readonly", width=17
+)
+category_combo.grid(row=0, column=3, padx=(0, 10), pady=8)
+
+# Amount field
+ttk.Label(input_frame, text="Amount").grid(row=0, column=4, padx=(10, 5), pady=8)
+ttk.Entry(input_frame, textvariable=amount_var, width=20).grid(row=0, column=5, padx=(0, 10), pady=8)
+
+# Note field
+ttk.Label(input_frame, text="Note (optional)").grid(row=1, column=0, padx=(10, 5), pady=8)
+ttk.Entry(input_frame, textvariable=note_var, width=80).grid(row=1, column=1, columnspan=5, padx=(0, 10), pady=8)
+
 
 button_frame = ttk.Frame(window)
 button_frame.pack(pady=10)
 
 ttk.Button(button_frame, text="Add Expense", command=add_button_clicked).grid(row=0, column=0, padx=5)
 ttk.Button(button_frame, text="Delete Expense", command=delete_button_clicked).grid(row=0, column=1, padx=5)
-#ttk.Button(button_frame, text="Sort", command=sort_button_clicked).grid(row=0, column=2, padx=5)
+ttk.Button(button_frame, text="Sort by Amount", command=sort_button_clicked).grid(row=0, column=2, padx=5)
 ttk.Button(button_frame, text="Search", command=search_button_clicked).grid(row=0, column=3, padx=5)
 ttk.Button(button_frame, text="Overall Report", command=total_button_clicked).grid(row=0, column=4, padx=5)
 ttk.Button(button_frame, text="Show Chart", command=chart_button_clicked).grid(row=0, column=5, padx=5)
